@@ -4,6 +4,18 @@ const PORT = 3000
 
 const URL = require('../../models/Url')
 
+
+// jump to the web page
+router.get('/:shorterUrl', (req, res) => {
+  const shorterUrl = req.params.shorterUrl
+  URL.findOne({shorterUrl})
+    .lean()
+    .then(url => {
+      res.render('link', {originalUrl: url.originalUrl})
+    })
+    .catch(error => console.log(error))
+})
+
 // 首頁
 router.get('/', (req, res) => {
   res.render('index')
@@ -11,7 +23,6 @@ router.get('/', (req, res) => {
 
 // create new URL(short)
 router.post('/', (req, res) => {
-
   // 判斷是否有輸入網址
   if(!req.body.originalUrl){
     return res.render('error')
@@ -41,7 +52,7 @@ router.post('/', (req, res) => {
         // 如果沒有舊資料就直接成立新資料
         URL.create({
           originalUrl: originalUrl,
-          shorterUrl: `localhost${PORT}/${finalRandomLetter}`
+          shorterUrl: finalRandomLetter
         })
         .then((url) => {
           return res.render('index', {value: url.shorterUrl})
@@ -50,6 +61,7 @@ router.post('/', (req, res) => {
     })
     .catch(error => console.log(error))    
 })
+
 
 module.exports = router
 
