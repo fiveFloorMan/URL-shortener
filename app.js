@@ -3,6 +3,8 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
+const URL = require('./models/Url')
+
 const PORT = 3000
 const app = express()
 
@@ -32,7 +34,8 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
 
   // 判斷是否有輸入網址
-  if(!req.body.origianlUrl){
+  if(!req.body.originalUrl){
+    console.log('req.body.originalUrl:', req.body.originalUrl)
     return res.render('error')
   }
   // 產生隨機英數
@@ -50,7 +53,27 @@ app.post('/', (req, res) => {
   // finalRandomLetter 是最後的隨機英數
 
   //判斷是否已經縮短過的網址
-  
+  const originalUrl = req.body.originalUrl
+  console.log('URL:', URL)
+    URL.findOne({ originalUrl })
+      .lean()
+      .then(url => {
+        if(url){ 
+          // 如果已經有舊的資料
+          return res.render('index', {value: url.shorterUrl})
+        } else {
+          // 如果沒有舊資料就直接成立新資料
+          URL.create({
+            originalUrl: originalUrl,
+            shorterUrl: `localhost${PORT}/${finalRandomLetter}`
+          })
+          .then((url) => {
+            return res.render('index', {value: url.shorterUrl})
+          })
+        }
+      })
+      .catch(error => console.log(error))
+      
 })
 
 app.listen(PORT, () => {
