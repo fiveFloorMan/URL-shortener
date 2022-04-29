@@ -14,10 +14,11 @@ router.get('/:shorterUrl', (req, res) => {
   URL.findOne({ shorterUrl })
     .lean()
     .then(url => {
-      if(url === null){return}
-      // 如果url是空值就不會走下去, 來方便bash的頁面乾淨(不然即便運行正常也會一直跑typeError)
+      if(url === null){
+        return res.render('error',{ notExistMessage: 'Hi 輸入的短網址並不存在喔!' })
+      }
+      // 如果url是空值or不存在DB的短網址就不會走下去, 來方便bash的頁面乾淨(不然即便運行正常也會一直跑typeError)
       res.render('link', { originalUrl: url.originalUrl })
-      
     })
     .catch(error => console.log(error))
 })
@@ -26,7 +27,7 @@ router.get('/:shorterUrl', (req, res) => {
 router.post('/', (req, res) => {
   // 判斷是否有輸入網址
   if (!req.body.originalUrl) {
-    return res.render('error')
+    return res.render('error',{ notNullMessgae: 'Hi 下面的格子不能是空的喔!'})
   }
   // 產生隨機英數
   const finalRandomLetterArray = []

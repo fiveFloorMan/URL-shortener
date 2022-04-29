@@ -1,13 +1,19 @@
+
 <div class="row justify-content-md-center mt-3">
   <div class="col-md-auto">
-    Hi 下面的格子不能是空的喔!
+    {{#if notExistMessage}}
+      {{notExistMessage}}
+      {{!-- notExistMessage = 'Hi 輸入的短網址並不存在喔!' --}}
+    {{/if}}
+    {{#if notNullMessgae}}
+      {{notNullMessgae}}
+      {{!-- notNullMessgae = 'Hi 下面的格子不能是空的喔!' --}}
+    {{/if}}
   </div>
 </div>
 <div class="row justify-content-md-center mt-3">
   <div class="col-md-auto">
     <form action="/" method="POST">
-        {{#if value}}
-        {{else}}http://{{/if}} 
       <input style="vertical-align: middle;display:inline" type="text" placeholder="請輸入要縮短的網址" name="originalUrl">
     <button class="btn btn-danger">Submit!</button>
     </form>
