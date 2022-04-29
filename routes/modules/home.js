@@ -7,6 +7,7 @@ const URL = require('../../models/Url')
 router.get('/', (req, res) => {
   return res.render('index')
 })
+
 // jump to the web page
 router.get('/:shorterUrl', (req, res) => {
   const shorterUrl = req.params.shorterUrl
@@ -16,11 +17,10 @@ router.get('/:shorterUrl', (req, res) => {
       if(url === null){return}
       // 如果url是空值就不會走下去, 來方便bash的頁面乾淨(不然即便運行正常也會一直跑typeError)
       res.render('link', { originalUrl: url.originalUrl })
+      
     })
     .catch(error => console.log(error))
 })
-
-
 
 // create new URL(short)
 router.post('/', (req, res) => {
@@ -65,6 +65,8 @@ router.post('/', (req, res) => {
 
 module.exports = router
 
+
+// ----function area----
 // 取得亂數
 function getRandomNum (number) {
   return Math.floor(Math.random() * number)
