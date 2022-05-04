@@ -9,7 +9,7 @@
   <div class="col-md-auto">
     <form action="/" method="POST">
       <input style="vertical-align: middle;" type="text" placeholder="請輸入要縮短的網址" name="originalUrl" {{#if value }} value="localhost:3000/{{value}}" {{/if}}>
-    <button class="btn btn-success">Submit</button>
+    {{#if value}}{{else}}<button class="btn btn-success">Submit</button>{{/if}}
     </form>
   </div>
 </div>
